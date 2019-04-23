@@ -1,0 +1,2 @@
+PX:1, PY:1, PZ:1
+BN:gfd,BX:0.2,BY:0.2,BZ:0.2
