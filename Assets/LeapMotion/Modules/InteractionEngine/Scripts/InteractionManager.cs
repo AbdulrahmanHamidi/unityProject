@@ -643,7 +643,7 @@ namespace Leap.Unity.Interaction {
 
     #region State Notifications
 
-        // TODO: Delete this whole sction
+        
 
         //private HashSet<InteractionController> controllerSetBuffer = new HashSet<InteractionController>();
 

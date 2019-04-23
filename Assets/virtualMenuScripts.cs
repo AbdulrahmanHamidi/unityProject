@@ -10,6 +10,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
+
 public class virtualMenuScripts : MonoBehaviour
 {
     private string _boxName = "";
@@ -418,6 +419,7 @@ public class virtualMenuScripts : MonoBehaviour
         oldGameBoxes = JsonConvert.DeserializeObject<List<GameBox>>(www.text);
         
         //private Excel.Application app = null;
+        //TODO try to make excel file
     }
 
 

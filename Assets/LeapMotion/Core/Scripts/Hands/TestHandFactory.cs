@@ -295,7 +295,7 @@ namespace Leap {
   }
 
   // Note: The fact that this class needs to exist is ridiculous
-  // TODO: Look into automatically returning things in Unity units? Would require changes
+  
   // for everything that uses the TestHandFactory.
   public static class LeapTestProviderExtensions {
 

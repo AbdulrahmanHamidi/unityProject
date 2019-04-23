@@ -48,7 +48,7 @@ namespace LeapInternal {
 
     private DistortionData _currentLeftDistortionData = new DistortionData();
     private DistortionData _currentRightDistortionData = new DistortionData();
-    private int _frameBufferLength = 60; //TODO, surface this value in LeapC, currently hardcoded!
+    private int _frameBufferLength = 60; 
 
     private IntPtr _leapConnection;
     private bool _isRunning = false;
@@ -649,7 +649,7 @@ namespace LeapInternal {
       if (_activePolicies != _requestedPolicies) {
         // This could happen when config is turned off, or
         // this is the policy change event from the last SetPolicy, after that, the user called SetPolicy again
-        //TODO handle failure to set desired policy -- maybe a PolicyDenied event
+        
       }
     }
 

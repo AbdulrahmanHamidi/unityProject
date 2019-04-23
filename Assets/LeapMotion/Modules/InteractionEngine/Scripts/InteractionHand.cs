@@ -41,7 +41,7 @@ namespace Leap.Unity.Interaction {
     public HandDataMode handDataMode {
       get { return _handDataMode; }
       set {
-        // TODO: Do validation if this is modified!
+        
         _handDataMode = value;
       }
     }
