@@ -60,7 +60,7 @@ public class Box
         WWWForm form = new WWWForm();
         string[] cols = { "project_id","x", "y", "z", "mass","name","stamina","ImagePath", "xAxisRotation", "yAxisRotation", "zAxisRotation" };
         string[] vals = {
-            "1",
+            ManagerScript.Instance.project.id.ToString(),
             this.x.ToString(),
             this.y.ToString(),
             this.z.ToString(),

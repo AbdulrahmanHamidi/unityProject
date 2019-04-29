@@ -98,7 +98,6 @@ public class Animations : MonoBehaviour
             percentageComplete = timeSinceStarted / lerpTime;
 
             float currentValue = Mathf.Lerp(start, end, percentageComplete)/50;
-            print(currentValue);
             obje.transform.position -= new Vector3(0,0,currentValue ); //currentValue;
             if (obje.transform.position.z >0)
             {

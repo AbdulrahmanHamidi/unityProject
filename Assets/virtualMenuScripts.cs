@@ -63,7 +63,7 @@ public class virtualMenuScripts : MonoBehaviour
 
 
     public GameObject MovableBox;
-
+    private List<GameObject> btns;
 
     // functions
 
@@ -338,7 +338,7 @@ public class virtualMenuScripts : MonoBehaviour
 
 
     #region Saving Project
-    public void save() //save box
+    public void save() //save box // 
     {
         Box box = new Box();
         box.ImagePath = ManagerScript.Instance.tempBox.ImagePath;
@@ -393,15 +393,17 @@ public class virtualMenuScripts : MonoBehaviour
         projcet.name = Menu.transform.Find("ProjectName").gameObject.GetComponent<InputField>().text;
 
         yield return projcet.saveDb();
+        
         if (projcet.id > 0)
         {
             ManagerScript.Instance.project.id = projcet.id;
             ManagerScript.Instance.project.name = projcet.name;
-
+            ManagerScript.Instance.isProjectSet = true;
             Menu.transform.Find("UIElementsPanel").gameObject.transform.Find("Pallet Sec").gameObject.SetActive(true);
             yield return getOldGameBoxes();
             if (oldGameBoxes.Count() > 0)
             {
+                yield return new WaitForSeconds(2);
                 foreach (var box in oldGameBoxes)
                 {
                     Vector3 position = new Vector3(box.position_x, box.position_y, box.position_z);
@@ -418,10 +420,83 @@ public class virtualMenuScripts : MonoBehaviour
                         newBox.go.name = box.id.ToString();
                         yield return setBoxPicture(newBox);
                     }
-                  
-
                 }
             }
+            
+            // setting hand menu
+            if (ManagerScript.Instance.isBoxesListSet)
+            {
+                counter++;
+                List<Box> boxes = ManagerScript.Instance.boxes;
+                Transform temp;
+                string []Buttons = new[]
+                {
+                    "TopLeft",
+                    "TopCenter",
+                    "TopRight",
+                    "CenterLeft",
+                    "CenterCenter",
+                    "CenterRight",
+                    "BottomLeft",
+                    "BottomCenter",
+                    "BottomRight",
+                };
+
+                foreach (var box in ManagerScript.Instance.boxes)
+                {
+                    GameObject parent = ManagerScript.Instance.HandMenuBtnParent;
+                    temp = parent.transform.Find(Buttons[counter]).transform;
+                            
+                    GameObject newMenuBtn = Instantiate(
+                        ManagerScript.Instance.BtnProductObj,
+                        temp.position,
+                        temp.rotation,
+                        parent.transform
+                    );
+                
+                    newMenuBtn.name = box.name;
+                    string boxText = box.name + "\n" + box.x + " x " + box.y + " x " + box.z;
+                    newMenuBtn
+                                    
+                
+                        .transform.Find("ButtonBackdrop")
+                        .transform.Find("Text")
+                        .gameObject.GetComponent<Text>()
+                        .text = boxText;
+                
+                    counter++;
+                }
+                
+                
+                
+//                //get data from the database
+//                WWW DropDownData = new WWW("http://localhost:8000/api/boxes/project/"+ManagerScript.Instance.project.id);
+//                yield return DropDownData;
+//                string Data = DropDownData.text;
+//                boxes = new List<Box>();
+//                boxes = JsonConvert.DeserializeObject<List<Box>>(Data);
+//                
+//                btns = new List<GameObject>();
+//                int sayac = 0;
+            }
+
+
+
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
         }
         else
         {
@@ -438,10 +513,7 @@ public class virtualMenuScripts : MonoBehaviour
         yield return www;
         oldGameBoxes = new List<GameBox>();
         oldGameBoxes = JsonConvert.DeserializeObject<List<GameBox>>(www.text);
-        
-        //private Excel.Application app = null;
-        //TODO try to make excel file
-       
+
         
     }
 
@@ -450,8 +522,6 @@ public class virtualMenuScripts : MonoBehaviour
     {
         Renderer rend = box.go.transform.Find("Cube").gameObject.GetComponent<MeshRenderer>();
 
-
-       
         string image_url = ManagerScript.Instance.boxes.Find(x => x.id == box.box_id).ImagePath;
         WWW w = new WWW(image_url);
         yield return w;
@@ -506,16 +576,6 @@ public class virtualMenuScripts : MonoBehaviour
 
 
         ManagerScript.Instance.tempGameboxes = JsonConvert.DeserializeObject<List<GameBox>>(Data);
-//
-//        string fileName = "testdata.txt";
-//        System.IO.StreamWriter objWriter;
-//        objWriter = new StreamWriter(fileName);
-//        
-//        objWriter.WriteLine("teest line");
-
-
-
-
         string fileName = @"C:\Users\abdul\OneDrive\Desktop\Menu test\Assets\test.txt";    
     
         try    

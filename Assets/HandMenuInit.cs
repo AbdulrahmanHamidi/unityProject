@@ -17,85 +17,41 @@ public class HandMenuInit : MonoBehaviour
     public GameObject CenterRight;
 
 
-    public GameObject BtnProductObj;
-    public GameObject parent;
-
-
+    //public GameObject BtnProductObj;
+   // public GameObject parent;
     private List<Box> boxes;
     private List<GameObject> btns;
     private List<Transform> positions;
     private string[] Buttons;
-
+    int counter = 0;
     // Start is called before the first frame update
-    IEnumerator Start()
-    {
-        Buttons = new[]
-        {
-            "TopLeft",
-            "TopCenter",
-            "TopRight",
-            "CenterLeft",
-            "CenterCenter",
-            "CenterRight",
-            "BottomLeft",
-            "BottomCenter",
-            "BottomRight",
-        };
-//        positions
-//            = new List<Transform>();
-//        positions.Add(TopLeft.transform);
-//        positions.Add(TopCenter.transform);
-//        positions.Add(TopRight.transform);
-//        positions.Add(CenterLeft.transform);
-//        positions.Add(CenterCenter.transform);
-//        positions.Add(CenterRight.transform);
-
-        int counter = 0;
-        yield return new WaitForSeconds(2);
-        boxes = ManagerScript.Instance.boxes;
-        Transform temp;
-        foreach (var box in ManagerScript.Instance.boxes)
-        {
-            temp = parent.transform.Find(Buttons[counter]).transform;
-            
-            GameObject newMenuBtn = Instantiate(
-                BtnProductObj,
-                temp.position,
-                temp.rotation,
-                parent.transform
-            );
-
-            newMenuBtn.name = box.name;
-            string boxText = box.name + "\n" + box.x + " x " + box.y + " x " + box.z;
-            newMenuBtn
-                    
-
-                .transform.Find("ButtonBackdrop")
-                .transform.Find("Text")
-                .gameObject.GetComponent<Text>()
-                .text = boxText;
-
-            counter++;
-        }
-
-
-
-        //get data from the database
-        WWW DropDownData = new WWW("http://localhost:8000/api/boxes");
-        yield return DropDownData;
-        string Data = DropDownData.text;
-        boxes = new List<Box>();
-        boxes = JsonConvert.DeserializeObject<List<Box>>(Data);
-
-        btns = new List<GameObject>();
-        int sayac = 0;
-
-    }
+//    IEnumerator Start()
+//    {
+//        Buttons = new[]
+//        {
+//            "TopLeft",
+//            "TopCenter",
+//            "TopRight",
+//            "CenterLeft",
+//            "CenterCenter",
+//            "CenterRight",
+//            "BottomLeft",
+//            "BottomCenter",
+//            "BottomRight",
+//        };
+//        
+//        
+//        
+//    }
 
     // Update is called once per frame
-    void Update()
-    {
-    }
+//    void Update()
+//    {
+//        if (ManagerScript.Instance.isBoxesListSet && counter==0)
+//        {
+//            StartCoroutine(Start());
+//        }
+//    }
 
 
     public void showmsg()

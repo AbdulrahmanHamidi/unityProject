@@ -38,9 +38,14 @@ public class ManagerScript : MonoBehaviour
     public Projcet project;
 
     public CanvasGroup alertBoxCanvaseGroup;
-    
-    
-    
+
+    public bool isProjectSet = false;
+    public bool isPalletSet = false;
+    public bool isOneBoxSet = false;
+    public bool isBoxesListSet = false;
+    public bool isProjectRestored = false;
+    public GameObject BtnProductObj;
+    public GameObject HandMenuBtnParent;
     private void Awake()
     {
         if (Instance == null)
@@ -60,17 +65,7 @@ public class ManagerScript : MonoBehaviour
     }
     
     
-//    IEnumerator Start()
-//    {
-//        WWW BoxesData = new WWW("http://localhost:8000/api/boxes");
-//        yield return BoxesData;
-//        string Data = BoxesData.text;
-//        boxes = new List<Box>();
-//        boxes = JsonConvert.DeserializeObject<List<Box>>(Data);
-//        ManagerScript.Instance.boxes = JsonConvert.DeserializeObject<List<Box>>(Data);
-//
-//    }
-    
+
     
     
 
