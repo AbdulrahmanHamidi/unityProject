@@ -1,8 +1,11 @@
-﻿using System.Collections;
+﻿﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Security.Cryptography.X509Certificates;
+using System.Text;
 using Crosstales.FB;
 using Newtonsoft.Json;
 //using NUnit.Framework.Constraints;
@@ -60,7 +63,7 @@ public class virtualMenuScripts : MonoBehaviour
 
 
     public GameObject MovableBox;
-
+    private List<GameObject> btns;
 
     // functions
 
@@ -90,7 +93,7 @@ public class virtualMenuScripts : MonoBehaviour
 
         screenText.GetComponent<Text>().text =
             numberString.Replace("\n", "");
-        Debug.Log(numberString);
+        //Debug.Log(numberString);
         ManagerScript.Instance.headNumberString = numberString.Replace("\n", "");
         GameObject field = ManagerScript.Instance.selectedField;
         if (field != null)
@@ -210,7 +213,7 @@ public class virtualMenuScripts : MonoBehaviour
     {
         // get box name from input field and put it in temp obj in manager script
         ManagerScript.Instance.tempBox.name = GetComponent<InputField>().text;
-        //Debug.Log(GetComponent<InputField>().text);
+        
     }
 
     public void getKeysFromTheKeyboard()
@@ -255,6 +258,7 @@ public class virtualMenuScripts : MonoBehaviour
 
     public void activateBoxSecOrDeactivate()
     {
+        
         if (CheckPalletInfo())
         {
             BoxSec.SetActive(true);
@@ -264,6 +268,8 @@ public class virtualMenuScripts : MonoBehaviour
             BoxSec.SetActive(false);
         }
     }
+    
+    
 
     #endregion
 
@@ -331,7 +337,8 @@ public class virtualMenuScripts : MonoBehaviour
     #endregion
 
 
-    public void save()
+    #region Saving Project
+    public void save() //save box // 
     {
         Box box = new Box();
         box.ImagePath = ManagerScript.Instance.tempBox.ImagePath;
@@ -343,9 +350,23 @@ public class virtualMenuScripts : MonoBehaviour
         box.yAxisRotation = BoxToggleY.GetComponent<Toggle>().isOn;
         box.zAxisRotation = BoxToggleZ.GetComponent<Toggle>().isOn;
         box.stamina = float.Parse(boxStamina.GetComponent<Text>().text);
-        StartCoroutine(box.saveDB());
+
+        StartCoroutine(IESave(box));
+
+
     }
 
+    public IEnumerator IESave(Box box)
+    {
+        yield return StartCoroutine(box.saveDB());
+        if (box.id >0)
+        {
+            //Animations script = new Animations();
+            //script.SetAlertBoxContent(box.name+ " Box Has Been Added To The Database");
+            //script.CallAnimate(box.name+ " Box Has Been Added To The Database");
+            //StartCoroutine( script.Animate());
+        }
+    }
 
     public void SetToggle(Toggle toggle)
     {
@@ -372,15 +393,17 @@ public class virtualMenuScripts : MonoBehaviour
         projcet.name = Menu.transform.Find("ProjectName").gameObject.GetComponent<InputField>().text;
 
         yield return projcet.saveDb();
+        
         if (projcet.id > 0)
         {
             ManagerScript.Instance.project.id = projcet.id;
             ManagerScript.Instance.project.name = projcet.name;
-
+            ManagerScript.Instance.isProjectSet = true;
             Menu.transform.Find("UIElementsPanel").gameObject.transform.Find("Pallet Sec").gameObject.SetActive(true);
             yield return getOldGameBoxes();
             if (oldGameBoxes.Count() > 0)
             {
+                yield return new WaitForSeconds(2);
                 foreach (var box in oldGameBoxes)
                 {
                     Vector3 position = new Vector3(box.position_x, box.position_y, box.position_z);
@@ -397,10 +420,83 @@ public class virtualMenuScripts : MonoBehaviour
                         newBox.go.name = box.id.ToString();
                         yield return setBoxPicture(newBox);
                     }
-                  
-
                 }
             }
+            
+            // setting hand menu
+            if (ManagerScript.Instance.isBoxesListSet)
+            {
+                counter++;
+                List<Box> boxes = ManagerScript.Instance.boxes;
+                Transform temp;
+                string []Buttons = new[]
+                {
+                    "TopLeft",
+                    "TopCenter",
+                    "TopRight",
+                    "CenterLeft",
+                    "CenterCenter",
+                    "CenterRight",
+                    "BottomLeft",
+                    "BottomCenter",
+                    "BottomRight",
+                };
+
+                foreach (var box in ManagerScript.Instance.boxes)
+                {
+                    GameObject parent = ManagerScript.Instance.HandMenuBtnParent;
+                    temp = parent.transform.Find(Buttons[counter]).transform;
+                            
+                    GameObject newMenuBtn = Instantiate(
+                        ManagerScript.Instance.BtnProductObj,
+                        temp.position,
+                        temp.rotation,
+                        parent.transform
+                    );
+                
+                    newMenuBtn.name = box.name;
+                    string boxText = box.name + "\n" + box.x + " x " + box.y + " x " + box.z;
+                    newMenuBtn
+                                    
+                
+                        .transform.Find("ButtonBackdrop")
+                        .transform.Find("Text")
+                        .gameObject.GetComponent<Text>()
+                        .text = boxText;
+                
+                    counter++;
+                }
+                
+                
+                
+//                //get data from the database
+//                WWW DropDownData = new WWW("http://localhost:8000/api/boxes/project/"+ManagerScript.Instance.project.id);
+//                yield return DropDownData;
+//                string Data = DropDownData.text;
+//                boxes = new List<Box>();
+//                boxes = JsonConvert.DeserializeObject<List<Box>>(Data);
+//                
+//                btns = new List<GameObject>();
+//                int sayac = 0;
+            }
+
+
+
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
         }
         else
         {
@@ -417,9 +513,8 @@ public class virtualMenuScripts : MonoBehaviour
         yield return www;
         oldGameBoxes = new List<GameBox>();
         oldGameBoxes = JsonConvert.DeserializeObject<List<GameBox>>(www.text);
+
         
-        //private Excel.Application app = null;
-        //TODO try to make excel file
     }
 
 
@@ -427,8 +522,6 @@ public class virtualMenuScripts : MonoBehaviour
     {
         Renderer rend = box.go.transform.Find("Cube").gameObject.GetComponent<MeshRenderer>();
 
-
-       
         string image_url = ManagerScript.Instance.boxes.Find(x => x.id == box.box_id).ImagePath;
         WWW w = new WWW(image_url);
         yield return w;
@@ -441,6 +534,84 @@ public class virtualMenuScripts : MonoBehaviour
 
     public void deactivateVirtualMenu(GameObject VirtualMenu)
     {
+        StartCoroutine(IEdeactivateVirtualMenu( VirtualMenu));
+    }
+
+    public IEnumerator IEdeactivateVirtualMenu(GameObject VirtualMenu)
+    {
+        yield return new WaitForSeconds(1);
         VirtualMenu.SetActive(false);
     }
+
+
+    public void SaveToFile()
+    {
+
+        StartCoroutine(IESaveToFile());
+
+
+//        using (WebClient wc = new WebClient())
+//        {
+//            //wc.DownloadProgressChanged += wc_DownloadProgressChanged;
+//            wc.DownloadFileAsync (
+//                // Param1 = Link of file
+//                new System.Uri("http://localhost:8000/api/download/project/"+ManagerScript.Instance.project.id),
+//                // Param2 = Path to save
+//                "C:\\Users\\abdul\\OneDrive\\Desktop\\Menu test\\projects.xlsx"
+//            );
+//        }
+    }
+
+
+    public IEnumerator IESaveToFile()
+    {
+        WWWForm form = new WWWForm();
+
+        WWW www = new WWW(
+            "http://localhost:8000/api/Gameboxes/project/" + ManagerScript.Instance.project.id, form);
+        yield return www;
+
+        Debug.Log(www.text);
+        string Data = www.text;
+
+
+        ManagerScript.Instance.tempGameboxes = JsonConvert.DeserializeObject<List<GameBox>>(Data);
+        string fileName = @"C:\Users\abdul\OneDrive\Desktop\Menu test\Assets\test.txt";    
+    
+        try    
+        {    
+            // Check if file already exists. If yes, delete it.     
+            if (File.Exists(fileName))    
+            {    
+                File.Delete(fileName);    
+            }    
+    
+            // Create a new file     
+            using (FileStream fs = File.Create(fileName))     
+            {    
+                // Add some text to file    
+                Byte[] title = new UTF8Encoding(true).GetBytes("New Text File");    
+                fs.Write(title, 0, title.Length);    
+                byte[] author = new UTF8Encoding(true).GetBytes("Mahesh Chand");    
+                fs.Write(author, 0, author.Length);    
+            }    
+    
+            // Open the stream and read it back.    
+            using (StreamReader sr = File.OpenText(fileName))    
+            {    
+                string s = "";    
+                while ((s = sr.ReadLine()) != null)    
+                {    
+                    Console.WriteLine(s);    
+                }    
+            }    
+        }    
+        catch (Exception Ex)    
+        {    
+            Console.WriteLine(Ex.ToString());    
+        }
+    }
+    
+    
+    #endregion
 }

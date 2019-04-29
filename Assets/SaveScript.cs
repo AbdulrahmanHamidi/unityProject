@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Text;
 using Newtonsoft.Json;
 using UnityEngine;
 using UnityEngine.UI;
@@ -11,19 +13,7 @@ public class SaveScript : MonoBehaviour
     public bool isOldRecordSaved = false;
 
 
-    public void print()
-    {
-        foreach (var gameBox in ManagerScript.Instance.gameBoxes)
-        {
-            Debug.Log(gameBox.name);
-            var position = gameBox.transform.position;
-            Debug.Log(position.x);
-            Debug.Log(position.y);
-            Debug.Log(position.z);
-        }
-
-        Debug.Log("=================");
-    }
+   
 
 
     public void CallSave()
@@ -63,7 +53,7 @@ public class SaveScript : MonoBehaviour
                 string[] vals =
                 {
                     ManagerScript.Instance.project.id.ToString(),
-                    x.id.ToString(),
+                    x.box_id.ToString(),
                     x.cube.transform.position.x.ToString(),
                     x.cube.transform.position.y.ToString(),
                     x.cube.transform.position.z.ToString(),
@@ -86,7 +76,7 @@ public class SaveScript : MonoBehaviour
                 WWW www = new WWW(
                     "http://localhost:8000/api/save/gamebox", form);
                 yield return www;
-                //Debug.Log(www.text + counter++);
+                Debug.Log(www.text );
             }
         }
     }
@@ -103,7 +93,10 @@ public class SaveScript : MonoBehaviour
 
         Debug.Log(www.text);
         string Data = www.text;
-
+        if (Data == "[]")
+        {
+            isOldRecordSaved = true;
+        }
 
         ManagerScript.Instance.tempGameboxes = JsonConvert.DeserializeObject<List<GameBox>>(Data);
         isOldRecordSaved = true;
@@ -117,6 +110,7 @@ public class SaveScript : MonoBehaviour
         WWW www = new WWW(
             "http://localhost:8000/api/Gameboxes/delete/project/" + ManagerScript.Instance.project.id, form);
         yield return www;
+        print(www.text);
     }
     private List<GameBox> convertToGameBoxClassArray(List<GameObject> gameBoxes)
     {
@@ -150,5 +144,102 @@ public class SaveScript : MonoBehaviour
             form.AddField(item, val[counter]);
             counter++;
         }
+    }
+
+
+    public void SaveToFile()
+    {
+        StartCoroutine(IESaveToFile());
+//        using (System.IO.StreamWriter file = 
+           //            new System.IO.StreamWriter(@"C:\Users\Public\TestFolder\WriteLines2.txt", true))
+           //        {
+           //            foreach (var box in ManagerScript.Instance.gameBoxes)
+           //            {
+           //                
+           //            }
+           //            file.WriteLine("Fourth line");
+           //        }
+    }
+    
+    
+
+
+    public IEnumerator IESaveToFile()
+    {
+        WWWForm form = new WWWForm();
+
+        WWW www = new WWW(
+            "http://localhost:8000/api/Gameboxes/project/" + ManagerScript.Instance.project.id, form);
+        yield return www;
+
+        Debug.Log(www.text);
+        string Data = www.text;
+
+
+        ManagerScript.Instance.tempGameboxes = JsonConvert.DeserializeObject<List<GameBox>>(Data);
+        string path = @"C:\Users\abdul\OneDrive\Desktop\Menu test\Assets\testdata.txt";
+        File.WriteAllText(path, www.text);
+        string fileName = @"C:\Users\abdul\OneDrive\Desktop\Menu test\Assets\testdata.txt";
+//        System.IO.StreamWriter objWriter;
+//        objWriter = new StreamWriter(fileName);
+//        
+//        objWriter.Write(www.text);
+
+
+
+
+        fileName = @"C:\Users\abdul\OneDrive\Desktop\Menu test\Assets\testdata.txt";    
+    
+//        try    
+//        {    
+//            // Check if file already exists. If yes, delete it.     
+//            if (File.Exists(fileName))    
+//            {    
+//                File.Delete(fileName);    
+//            }    
+//    
+//            // Create a new file     
+//            using (FileStream fs = File.Create(fileName))     
+//            {
+//
+//
+//                foreach (var box in ManagerScript.Instance.gameBoxes)
+//                {
+//                    string stringLine =
+//                            box.name + " " +
+//                            box.position_x + " " +
+//                            box.position_y + " " +
+//                            box.position_z + " " +
+//                            box.rotation_x + " " +
+//                            box.rotation_y + " " +
+//                            box.rotation_z + " " +
+//                            box.scale_x + " " +
+//                            box.scale_y + " " +
+//                            box.scale_z + " " +
+//                            box.is_done + " " +
+//                            box.box_id + " " +
+//                            box.project_id + " " 
+//                        ;
+//                    Byte[] line = new UTF8Encoding(true)
+//                        .GetBytes(stringLine);    
+//                    fs.Write(line, 0, line.Length);   
+//                }
+//
+//            }    
+//    
+//            // Open the stream and read it back.    
+//            using (StreamReader sr = File.OpenText(fileName))    
+//            {    
+//                string s = "";    
+//                while ((s = sr.ReadLine()) != null)    
+//                {    
+//                    Console.WriteLine(s);    
+//                }    
+//            }    
+//        }    
+//        catch (Exception Ex)    
+//        {    
+//            Console.WriteLine(Ex.ToString());    
+//        }
     }
 }
