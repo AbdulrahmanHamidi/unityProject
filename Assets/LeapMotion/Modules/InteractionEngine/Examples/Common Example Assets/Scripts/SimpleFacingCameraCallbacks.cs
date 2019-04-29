@@ -70,8 +70,8 @@ namespace Leap.Unity.Examples
 
 
             bool left = Vector3.Dot((camera.transform.position - facingTransform.position).normalized, facingTransform.forward) > minAllowedDotProduct;
-            bool right = Vector3.Dot((camera.transform.position - rfacingTransform.position).normalized, rfacingTransform.forward) > minAllowedDotProduct;
-
+            //bool right = Vector3.Dot((camera.transform.position - rfacingTransform.position).normalized, rfacingTransform.forward) > minAllowedDotProduct;
+            bool right = true;
             if (left && right && !check)
             {
                 check = true;

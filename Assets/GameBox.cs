@@ -41,7 +41,7 @@ public class GameBox : MonoBehaviour
 
     public GameBox(GameObject go, Box box)
     {
-        this.id = box.id;
+        this.box_id = box.id;
         this.go = go;
         this.cube = go.transform.Find("Cube").gameObject;
         this.transformTools = go.transform.Find("Transform Tool").gameObject;
@@ -51,7 +51,7 @@ public class GameBox : MonoBehaviour
         this.rotation_x = go.transform.rotation.x;
         this.rotation_y = go.transform.rotation.y;
         this.rotation_z = go.transform.rotation.z;
-       // this.is_done = false;
+       
     }
     
     public GameBox(GameBox gamebox,GameObject go)
@@ -76,9 +76,50 @@ public class GameBox : MonoBehaviour
 
     public void MakeItDone()
     {
+        
+        Box father_box = ManagerScript.Instance.boxes.Find(x => x.id == this.box_id);
+
         this.is_done = true;
         RigidbodyConstraints rc;
         rc = RigidbodyConstraints.None;
+
+
+        if (!father_box.xAxisRotation && !father_box.yAxisRotation && !father_box.zAxisRotation) //0,0,0
+        {
+            rc = RigidbodyConstraints.FreezeRotationX|RigidbodyConstraints.FreezeRotationY|RigidbodyConstraints.FreezeRotationZ;
+            
+        }else if (!father_box.xAxisRotation && !father_box.yAxisRotation && father_box.zAxisRotation)//0,0,1
+        {
+            rc = RigidbodyConstraints.FreezeRotationX|RigidbodyConstraints.FreezeRotationY;
+            
+        }else if (!father_box.xAxisRotation && father_box.yAxisRotation && !father_box.zAxisRotation)//0,1,0
+        {
+            rc = RigidbodyConstraints.FreezeRotationX|RigidbodyConstraints.FreezeRotationZ;
+            
+        }else if (!father_box.xAxisRotation && father_box.yAxisRotation && father_box.zAxisRotation)//0,1,1
+        {
+            rc = RigidbodyConstraints.FreezeRotationX;
+            
+        }
+        
+        else if (father_box.xAxisRotation && !father_box.yAxisRotation && !father_box.zAxisRotation)//1,0,0
+        {
+            rc = RigidbodyConstraints.FreezeRotationY|RigidbodyConstraints.FreezeRotationZ;
+            
+        }
+        else if (father_box.xAxisRotation && !father_box.yAxisRotation && father_box.zAxisRotation)//1,0,1
+        {
+            rc = RigidbodyConstraints.FreezeRotationY;
+        }
+        else if (father_box.xAxisRotation && father_box.yAxisRotation && !father_box.zAxisRotation)//1,1,0
+        {
+            rc = RigidbodyConstraints.FreezeRotationZ;
+        }
+        else if (father_box.xAxisRotation && father_box.yAxisRotation && father_box.zAxisRotation)//1,1,1
+        {
+            rc = RigidbodyConstraints.None;
+        }
+            
 
         go.transform.position += go.transform.Find("Cube").gameObject.transform.localPosition;
         go.transform.rotation = new Quaternion(go.transform.Find("Cube").gameObject.transform.localRotation.x,
@@ -99,6 +140,7 @@ public class GameBox : MonoBehaviour
     {
         if (ManagerScript.Instance.gameBoxes.Exists(x => x.is_done == false))
         {
+          
             this.is_done = false;
             RigidbodyConstraints rc;
             rc = RigidbodyConstraints.FreezeAll;

@@ -151,7 +151,7 @@ namespace Leap.Unity.Recording {
                        + "LeapRecording implementation.", this);
         }
       }
-
+      assetFolder = new AssetFolder(@"C:\Users\abdul\OneDrive\Desktop\Menu test\Assets\LeapMotion\Modules\HierarchyRecording\Examples\Leap Frames");
       string assetPath = Path.Combine(assetFolder.Path, recordingName + ".asset");
       AssetDatabase.CreateAsset(timeline, assetPath);
       AssetDatabase.AddObjectToAsset(animationTrack, timeline);
@@ -204,6 +204,7 @@ namespace Leap.Unity.Recording {
         DestroyImmediate(this);
 
         string prefabPath = Path.Combine(assetFolder.Path, recordingName + ".prefab");
+//        string prefabPath = Path.Combine(assetFolder.Path, recordingName + ".prefab");
         PrefabUtility.CreatePrefab(prefabPath.Replace('\\', '/'), myGameObject);
       });
     }

@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Newtonsoft.Json;
 using UnityEngine;
 
 public class StartScripting : MonoBehaviour
@@ -11,39 +12,20 @@ public class StartScripting : MonoBehaviour
     private Vector3 endPos;
     public float driftSec =3;
     private float driftTimer = 0;
-    // Start is called before the first frame update
-    void Start()
+
+
+    public IEnumerator Start()
     {
         startPos = transform.position;
-    }
+        WWW BoxesData = new WWW("http://localhost:8000/api/boxes");
+        yield return BoxesData;
+        string Data = BoxesData.text;
+        List<Box> boxes;
+        boxes = new List<Box>();
+        boxes = JsonConvert.DeserializeObject<List<Box>>(Data);
+        ManagerScript.Instance.boxes = boxes;//JsonConvert.DeserializeObject<List<Box>>(Data);
 
-    // Update is called once per frame
-    void Update()
-    {
-         
-//        if (isDrifting)
-//        {
-//            driftTimer += Time.deltaTime;
-//            if (driftTimer>driftSec)
-//            {
-//                stopDrifting();
-//            }
-//            else
-//            {
-//                Debug.Log("drifting");
-//                float ratio = driftTimer / driftSec;
-//                transform.position = Vector3.Lerp(endPos, startPos, ratio);
-//            }
-//        }
     }
-    
-    
-//    public void startGame()
-//    {
-//        isDrifting = true;
-//
-//        startPos = Leap.transform.position;
-//    }
 
 
     public void startDrifting(GameObject target)

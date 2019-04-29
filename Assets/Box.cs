@@ -1,4 +1,4 @@
-﻿using System.Collections;
+﻿﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 
 
-public class Box
+public class Box 
 {
     public int id;
     public float x;
@@ -19,6 +19,13 @@ public class Box
     public bool xAxisRotation = true;
     public bool yAxisRotation = true;
     public bool zAxisRotation = true;
+
+    public float rotation_x;
+    public float rotation_y;
+    public float rotation_z;
+    public float scale_x;
+    public float scale_y;
+    public float scale_z;
 
     public Box(GameObject box)
     {
@@ -69,11 +76,19 @@ public class Box
         WWW www = new WWW(
             "http://localhost:8000/api/box", form);
         yield return www;
-        Debug.Log(www.text);
+       // Debug.Log(www.text);
         if (www.text != "-1")
+        {
+
+
             id = int.Parse(www.text);
+            
+         
+        }
         else
             id = -1;
+        
+        
     }
 
     public void AddToForm(ref WWWForm form, string[] col, string[] val)

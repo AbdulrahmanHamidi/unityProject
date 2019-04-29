@@ -382,7 +382,7 @@ namespace Leap.Unity.Recording {
         AssetDatabase.Refresh();
 
         postProcessComponent.recordingName = recordingName;
-        postProcessComponent.assetFolder.Path = finalSubFolder;
+        postProcessComponent.assetFolder = new AssetFolder(finalSubFolder); 
         postProcessComponent.leapData = _leapData;
 
         string prefabPath = Path.Combine(finalSubFolder, recordingName + " Raw.prefab");

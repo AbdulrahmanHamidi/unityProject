@@ -1,5 +1,6 @@
-﻿﻿using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 using Random = System.Random;
 
@@ -38,33 +39,61 @@ public class btnScript : MonoBehaviour
             GameObject g = new GameObject();
             g.transform.position = new Vector3(0, 83f, 1.63f);
             g.transform.rotation = Quaternion.Euler(Vector3.zero);
+            string name = box.name;
             if (ManagerScript.Instance.gameBoxes.Exists(x => x.go.name == box.name))
             {
                 Random random = new Random();
-                box.name += random.Next(1, 100);
+                name = box.name + random.Next(1, 100);
             }
 
             GameObject newCube = Instantiate(ProductObj, ProductObjPos.transform.position,
                 ProductObjPos.transform.rotation);
-            newCube.name = box.name;
+            newCube.name = name;
 
-            ManagerScript.Instance.gameBoxes.Add(new GameBox(newCube,ManagerScript.Instance.boxes.Find(x =>x.name == box.name)));
+            // ReSharper disable once Unity.IncorrectMonoBehaviourInstantiation
+            Box temp = ManagerScript.Instance.boxes.Find(x => x.name == box.name);
+            ManagerScript.Instance.gameBoxes.Add(new GameBox(newCube, box));
 
 //            Renderer rend = newCube.transform.GetComponent<MeshRenderer>();
             Renderer rend = newCube.transform.Find("Cube").gameObject.GetComponent<MeshRenderer>();
+            
+            
+            //freezing rotaion axises
+            #region Freezing rotaion axises
 
+            if (!box.xAxisRotation)
+            {
+                newCube.transform.Find("Transform Tool").gameObject.transform.Find("Rotate Handles").gameObject
+                    .transform.Find("X Rotator Handles").gameObject.SetActive(false);
+            }
+            
+            if (!box.yAxisRotation)
+            {
+                newCube.transform.Find("Transform Tool").gameObject.transform.Find("Rotate Handles").gameObject
+                    .transform.Find("Y Rotator Handles").gameObject.SetActive(false);
+            }
+            
+            if (!box.zAxisRotation)
+            {
+                newCube.transform.Find("Transform Tool").gameObject.transform.Find("Rotate Handles").gameObject
+                    .transform.Find("Z Rotator Handles").gameObject.SetActive(false);
+            }
+
+            #endregion
+
+            #region Set image
 
             //get box from database by its name then get its image 
             string image_url = ManagerScript.Instance.boxes.Find(x => x.name == box.name).ImagePath;
             WWW w = new WWW(image_url);
             yield return w;
-       
+
             texture = w.texture;
-    
+
             rend.material.SetTexture(MainTex, texture);
-            
+            #endregion
+
             GameObject.Find("Menus").gameObject.SetActive(false);
-            
         }
         else
         {

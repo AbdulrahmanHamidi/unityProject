@@ -92,7 +92,7 @@ namespace Leap.Unity.Examples {
       // TransformHandles' transforms).
       target.transform.position += _moveBuffer;
       this.transform.position = target.transform.position;
-      Debug.Log(target.transform.position);
+     // Debug.Log(target.transform.position);
 
       if (target.transform.position.x >0.4f || target.transform.position.x<-0.2f||
        target.transform.position.z >1.7f || target.transform.position.z<-1.7f)

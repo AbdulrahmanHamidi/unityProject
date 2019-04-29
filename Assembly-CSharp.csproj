@@ -60,6 +60,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Animations.cs" />
     <Compile Include="Assets\Box.cs" />
     <Compile Include="Assets\btnScript.cs" />
     <Compile Include="Assets\destoryerScript.cs" />
@@ -505,6 +506,7 @@
     <None Include="Assets\TextMesh Pro\Resources\Shaders\TMP_SDF-Mobile.shader" />
     <None Include="Assets\TextMesh Pro\Resources\Shaders\TMP_Sprite.shader" />
     <None Include="Assets\TextMesh Pro\Resources\Shaders\TMP_SDF-Surface.shader" />
+    <None Include="Assets\testdata.txt" />
     <None Include="Assets\LeapMotion\Modules\GraphicRenderer\Shaders\DynamicText.shader" />
     <Reference Include="Unity.TextMeshPro.Editor">
       <HintPath>C:/Users/abdul/OneDrive/Desktop/Menu test/Library/ScriptAssemblies/Unity.TextMeshPro.Editor.dll</HintPath>
