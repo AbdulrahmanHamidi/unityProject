@@ -441,6 +441,7 @@
     <Compile Include="Assets\ManagerScript.cs" />
     <Compile Include="Assets\MenuBtn.cs" />
     <Compile Include="Assets\MovableBoxScript.cs" />
+    <Compile Include="Assets\MovementViaSphare.cs" />
     <Compile Include="Assets\Pallet.cs" />
     <Compile Include="Assets\PlayerController.cs" />
     <Compile Include="Assets\PlayerMotor.cs" />

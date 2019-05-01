@@ -150,4 +150,11 @@ public class GameBox : MonoBehaviour
             Debug.Log("rotate done");
         }
     }
+
+
+    public void DeleteFromTheScene()
+    {
+        GameBox temp =  ManagerScript.Instance.gameBoxes.Find(x => x.name == this.name);
+        ManagerScript.Instance.gameBoxes.Remove(temp);
+    }
 }

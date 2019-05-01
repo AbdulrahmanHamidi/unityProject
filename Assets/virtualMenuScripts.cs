@@ -359,26 +359,25 @@ public class virtualMenuScripts : MonoBehaviour
     public IEnumerator IESave(Box box)
     {
         yield return StartCoroutine(box.saveDB());
+
         if (box.id >0)
         {
-            //Animations script = new Animations();
-            //script.SetAlertBoxContent(box.name+ " Box Has Been Added To The Database");
-            //script.CallAnimate(box.name+ " Box Has Been Added To The Database");
-            //StartCoroutine( script.Animate());
+            ManagerScript.Instance.CanStart = true;
+            GameObject.Find("Pallet Sec").gameObject.SetActive(false);
         }
     }
 
-    public void SetToggle(Toggle toggle)
-    {
-        if (toggle.isOn)
-        {
-            //text.text = "On";
-        }
-        else
-        {
-            //text.text = "Off";
-        }
-    }
+//    public void SetToggle(Toggle toggle)
+//    {
+//        if (toggle.isOn)
+//        {
+//            //text.text = "On";
+//        }
+//        else
+//        {
+//            //text.text = "Off";
+//        }
+//    }
 
 
     public void CallSaveProject(GameObject Menu)
@@ -391,7 +390,6 @@ public class virtualMenuScripts : MonoBehaviour
     {
         Projcet projcet = new Projcet();
         projcet.name = Menu.transform.Find("ProjectName").gameObject.GetComponent<InputField>().text;
-
         yield return projcet.saveDb();
         
         if (projcet.id > 0)
@@ -403,7 +401,7 @@ public class virtualMenuScripts : MonoBehaviour
             yield return getOldGameBoxes();
             if (oldGameBoxes.Count() > 0)
             {
-                yield return new WaitForSeconds(2);
+                yield return new WaitForSeconds(1);
                 foreach (var box in oldGameBoxes)
                 {
                     Vector3 position = new Vector3(box.position_x, box.position_y, box.position_z);
@@ -421,80 +419,76 @@ public class virtualMenuScripts : MonoBehaviour
                         yield return setBoxPicture(newBox);
                     }
                 }
+
+               
             }
+            yield return new WaitForSeconds(1);
+            if (ManagerScript.Instance.boxes.Any())
+            {
+                ManagerScript.Instance.CanStart = true;
+            }
+            
             
             // setting hand menu
-            if (ManagerScript.Instance.isBoxesListSet)
-            {
-                counter++;
-                List<Box> boxes = ManagerScript.Instance.boxes;
-                Transform temp;
-                string []Buttons = new[]
-                {
-                    "TopLeft",
-                    "TopCenter",
-                    "TopRight",
-                    "CenterLeft",
-                    "CenterCenter",
-                    "CenterRight",
-                    "BottomLeft",
-                    "BottomCenter",
-                    "BottomRight",
-                };
-
-                foreach (var box in ManagerScript.Instance.boxes)
-                {
-                    GameObject parent = ManagerScript.Instance.HandMenuBtnParent;
-                    temp = parent.transform.Find(Buttons[counter]).transform;
-                            
-                    GameObject newMenuBtn = Instantiate(
-                        ManagerScript.Instance.BtnProductObj,
-                        temp.position,
-                        temp.rotation,
-                        parent.transform
-                    );
-                
-                    newMenuBtn.name = box.name;
-                    string boxText = box.name + "\n" + box.x + " x " + box.y + " x " + box.z;
-                    newMenuBtn
-                                    
-                
-                        .transform.Find("ButtonBackdrop")
-                        .transform.Find("Text")
-                        .gameObject.GetComponent<Text>()
-                        .text = boxText;
-                
-                    counter++;
-                }
-                
-                
-                
-//                //get data from the database
-//                WWW DropDownData = new WWW("http://localhost:8000/api/boxes/project/"+ManagerScript.Instance.project.id);
-//                yield return DropDownData;
-//                string Data = DropDownData.text;
-//                boxes = new List<Box>();
-//                boxes = JsonConvert.DeserializeObject<List<Box>>(Data);
+//            if (ManagerScript.Instance.isBoxesListSet)
+//            {
 //                
-//                btns = new List<GameObject>();
-//                int sayac = 0;
-            }
+//                counter++;
+//                List<Box> boxes = ManagerScript.Instance.boxes;
+//                Transform temp;
+//                string []Buttons = new[]
+//                {
+//                    "TopLeft",
+//                    "TopCenter",
+//                    "TopRight",
+//                    "CenterLeft",
+//                    "CenterCenter",
+//                    "CenterRight",
+//                    "BottomLeft",
+//                    "BottomCenter",
+//                    "BottomRight",
+//                };
+//
+//                foreach (var box in ManagerScript.Instance.boxes)
+//                {
+//                    GameObject parent = ManagerScript.Instance.HandMenuBtnParent;
+//                    temp = parent.transform.Find(Buttons[counter]).transform;
+//                            
+//                    GameObject newMenuBtn = Instantiate(
+//                        ManagerScript.Instance.BtnProductObj,
+//                        temp.position,
+//                        temp.rotation,
+//                        parent.transform
+//                    );
+//                
+//                    newMenuBtn.name = box.name;
+//                    string boxText = box.name + "\n" + box.x + " x " + box.y + " x " + box.z;
+//                    newMenuBtn
+//                                    
+//                
+//                        .transform.Find("ButtonBackdrop")
+//                        .transform.Find("Text")
+//                        .gameObject.GetComponent<Text>()
+//                        .text = boxText;
+//                
+//                    counter++;
+//                }
+//                
+//                ManagerScript.Instance.CanStart = true;
+//                
+////                //get data from the database
+////                WWW DropDownData = new WWW("http://localhost:8000/api/boxes/project/"+ManagerScript.Instance.project.id);
+////                yield return DropDownData;
+////                string Data = DropDownData.text;
+////                boxes = new List<Box>();
+////                boxes = JsonConvert.DeserializeObject<List<Box>>(Data);
+////                
+////                btns = new List<GameObject>();
+////                int sayac = 0;
+//            }
 
 
 
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
             
             
         }

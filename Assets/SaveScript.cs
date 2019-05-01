@@ -93,14 +93,9 @@ public class SaveScript : MonoBehaviour
 
         Debug.Log(www.text);
         string Data = www.text;
-        if (Data == "[]")
-        {
-            isOldRecordSaved = true;
-        }
-
         ManagerScript.Instance.tempGameboxes = JsonConvert.DeserializeObject<List<GameBox>>(Data);
         isOldRecordSaved = true;
-        //ManagerScript.Instance.boxes = JsonConvert.DeserializeObject<List<Box>>(Data);
+       
     }
 
 
@@ -150,15 +145,7 @@ public class SaveScript : MonoBehaviour
     public void SaveToFile()
     {
         StartCoroutine(IESaveToFile());
-//        using (System.IO.StreamWriter file = 
-           //            new System.IO.StreamWriter(@"C:\Users\Public\TestFolder\WriteLines2.txt", true))
-           //        {
-           //            foreach (var box in ManagerScript.Instance.gameBoxes)
-           //            {
-           //                
-           //            }
-           //            file.WriteLine("Fourth line");
-           //        }
+
     }
     
     

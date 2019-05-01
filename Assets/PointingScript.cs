@@ -70,11 +70,27 @@ public class PointingScript : MonoBehaviour
 
     public void ActivateFixedMenu(GameObject menus)
     {
-        menus.SetActive(true);
+        if (ManagerScript.Instance.Started)
+        {
+            menus.SetActive(true);
+
+        }
     }
     
     public void deactivateFixedMenu(GameObject menus)
     {
         menus.SetActive(false);
+    }
+
+
+
+    public void DeleteBox()
+    {
+        GameBox temp = ManagerScript.Instance.gameBoxes.Find(x => x.isLastTouched == true);
+        ManagerScript.Instance.gameBoxes.Remove(temp);
+        
+        
+        GameObject go = GameObject.Find(temp.go.name).gameObject;
+        go.SetActive(false);
     }
 }

@@ -10,7 +10,9 @@ public class ManagerScript : MonoBehaviour
 {
     public static ManagerScript Instance { get; private set; }
 
+    public GameObject StartBtn;
     public int value;
+    [SerializeField]
     public List<Box> boxes;
     public Palet palet ;
     public List<GameBox> gameBoxes;
@@ -44,6 +46,8 @@ public class ManagerScript : MonoBehaviour
     public bool isOneBoxSet = false;
     public bool isBoxesListSet = false;
     public bool isProjectRestored = false;
+    public bool CanStart = false;
+    public bool Started = false;
     public GameObject BtnProductObj;
     public GameObject HandMenuBtnParent;
     private void Awake()
@@ -62,6 +66,7 @@ public class ManagerScript : MonoBehaviour
         headNumberString = "";
         tempGameboxes = new List<GameBox>();
         project = new Projcet();
+        //boxes = new List<Box>();
     }
     
     

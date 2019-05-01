@@ -35,6 +35,7 @@ namespace Leap.Unity {
      * @since 4.1.2 
      */
     public bool IsActive{ get{ return _isActive;}}
+    [SerializeField]
     private bool _isActive = false;
     /** Dispatched when the detector activates (becomes true). 
      * @since 4.1.2
